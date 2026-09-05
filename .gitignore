@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+backend/triage.db
+.venv/
+venv/
+env/
+*.log

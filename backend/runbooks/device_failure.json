@@ -1,0 +1,17 @@
+{
+  "id": "RB-DEVICE-01",
+  "title": "Device Failure / Outage",
+  "category": "Hardware",
+  "description": "Emergency triage for completely unresponsive network devices, power disruptions, or service crashes.",
+  "conditions": {
+    "alert_types": ["device_unreachable", "service_unavailable", "route_failure"],
+    "required_symptoms_count": 2
+  },
+  "steps": [
+    "Execute out-of-band management console ping and IPMI power check",
+    "Inspect physical rack power supply units (PSU) and PDU breaker status",
+    "Verify adjacent switch/router uplink LED status",
+    "Check out-of-band serial console for kernel panic or hardware crash dumps",
+    "Escalate to Network Hardware Engineering if hardware failure is confirmed"
+  ]
+}

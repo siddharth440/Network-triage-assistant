@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incidents - AI Network Incident Triage Assistant</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NOC Header -->
+  <header class="noc-header">
+    <div class="brand-container">
+      <div class="brand-logo">AI</div>
+      <div class="brand-title">AI Network Incident Triage Assistant</div>
+    </div>
+    <nav class="noc-nav">
+      <a href="index.html" class="nav-link">📊 Dashboard</a>
+      <a href="alerts.html" class="nav-link">🔔 Alerts</a>
+      <a href="incidents.html" class="nav-link active">🚨 Incidents</a>
+      <a href="runbooks.html" class="nav-link">📖 Runbooks</a>
+      <a href="escalations.html" class="nav-link">🛡️ Escalations</a>
+    </nav>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      SYS ONLINE
+    </div>
+  </header>
+
+  <main class="noc-container">
+
+    <div class="page-title-row">
+      <div>
+        <h1 class="page-title">Correlated Network Incidents</h1>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Root cause candidate analysis, impact calculation & runbook recommendations</p>
+      </div>
+      <div class="action-bar">
+        <button id="btn-process-now" class="btn btn-primary">🔄 Re-run Triage Process</button>
+      </div>
+    </div>
+
+    <!-- Filters & Incident Table -->
+    <div class="noc-panel">
+      <div class="panel-header" style="flex-wrap: wrap; gap: 1rem;">
+        <div class="panel-title">Active & Archived Incidents</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; margin-right: 0.4rem;">PRIORITY:</label>
+            <select id="filter-priority" class="btn" style="padding: 0.35rem 0.6rem;">
+              <option value="ALL">ALL PRIORITIES</option>
+              <option value="CRITICAL">CRITICAL</option>
+              <option value="HIGH">HIGH</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="LOW">LOW</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; margin-right: 0.4rem;">STATUS:</label>
+            <select id="filter-status" class="btn" style="padding: 0.35rem 0.6rem;">
+              <option value="ALL">ALL STATUSES</option>
+              <option value="OPEN">OPEN</option>
+              <option value="IN_PROGRESS">IN PROGRESS</option>
+              <option value="ESCALATED">ESCALATED</option>
+              <option value="RESOLVED">RESOLVED</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="noc-table">
+          <thead>
+            <tr>
+              <th>Incident ID</th>
+              <th>Root Device</th>
+              <th>Priority</th>
+              <th>Impact</th>
+              <th>Status</th>
+              <th>Confidence</th>
+              <th>Correlated Events</th>
+              <th>Recommendation & Citation</th>
+            </tr>
+          </thead>
+          <tbody id="incidents-page-table-body">
+            <tr>
+              <td colspan="8" style="text-align:center; color: var(--text-muted); padding: 2rem;">Loading incidents...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Incident Detailed View Modal -->
+  <div id="incident-modal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div>
+          <span style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">INCIDENT ANALYSIS</span>
+          <div id="modal-inc-id" class="modal-title" style="color: var(--accent-cyan);">INC-1001</div>
+        </div>
+        <button class="modal-close" onclick="closeIncidentModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; background: #0b1120; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">ROOT DEVICE</div>
+            <div id="modal-inc-device" style="font-weight: 700; font-size: 1rem; color: #fff;">-</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">PRIORITY</div>
+            <div id="modal-inc-priority">-</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">LIKELY IMPACT</div>
+            <div id="modal-inc-impact" style="font-weight: 700;">-</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">STATUS</div>
+            <div id="modal-inc-status">-</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">CONFIDENCE</div>
+            <div id="modal-inc-confidence" style="font-weight: 800; color: var(--accent-blue); font-size: 1rem;">-</div>
+          </div>
+        </div>
+
+        <div class="explain-box">
+          <div class="explain-title">Recommended Initial Response</div>
+          <div id="modal-rec-action" style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.8rem;">-</div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.4rem;">Why this recommendation?</div>
+          <ul id="modal-rec-why" class="explain-list"></ul>
+          <div style="display: flex; gap: 1.5rem; margin-top: 1rem; font-size: 0.85rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+            <div><strong>Runbook Source:</strong> <span id="modal-rec-runbook" style="color: var(--accent-cyan); font-weight: 600;">-</span></div>
+            <div><strong>Match Confidence:</strong> <span id="modal-rec-confidence" style="color: var(--color-low); font-weight: 700;">-</span></div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div style="background: #0b1120; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">Likely Root Cause</div>
+            <div id="modal-inc-rootcause" style="color: var(--text-primary); font-weight: 600;">-</div>
+          </div>
+
+          <div style="background: #0b1120; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">Multi-Signal Correlation Explanation</div>
+            <ul id="modal-corr-reasons" style="padding-left: 1rem; color: var(--text-secondary); font-size: 0.82rem;"></ul>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.75rem;">Incident Event Timeline</h4>
+          <div id="modal-timeline" class="timeline-container"></div>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.75rem;">Grouped Alerts</h4>
+          <div class="table-responsive">
+            <table class="noc-table">
+              <thead>
+                <tr>
+                  <th>Device</th>
+                  <th>Severity</th>
+                  <th>Alert Type</th>
+                  <th>Message</th>
+                  <th>Occurrences</th>
+                </tr>
+              </thead>
+              <tbody id="modal-alerts-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="modal-escalation-panel" style="display: none; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.4); padding: 1rem; border-radius: 8px;">
+          <h4 style="color: var(--color-escalated); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">🛡️ Escalation Required</h4>
+          <p style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.5rem;">No standard runbook matched this multi-failure symptom pattern. Complete evidence preserved and assigned to L3 team.</p>
+          <div style="font-size: 0.85rem;">
+            <strong>Assigned Team:</strong> <span id="modal-esc-team">Network Engineering</span> | 
+            <strong>Status:</strong> <span id="modal-esc-status">ESCALATED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/incidents.js"></script>
+</body>
+</html>

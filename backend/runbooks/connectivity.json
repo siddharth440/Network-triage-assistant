@@ -1,0 +1,18 @@
+{
+  "id": "RB-CONNECTIVITY-01",
+  "title": "Network Link Failure",
+  "category": "Connectivity",
+  "description": "Standard operational procedure for diagnosing and resolving link down and unreachable network device events.",
+  "conditions": {
+    "alert_types": ["link_down", "device_unreachable", "packet_loss", "interface_error"],
+    "required_symptoms_count": 2,
+    "min_packet_loss": 50.0
+  },
+  "steps": [
+    "Check interface status on target device via management console",
+    "Verify physical fiber/copper cable connectivity to neighboring switch",
+    "Inspect neighboring switch port status and link speed negotiation",
+    "Check interface error rates (CRC, frame errors, drops)",
+    "Verify OSPF/BGP routing neighbor status and route table updates"
+  ]
+}

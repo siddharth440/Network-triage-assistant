@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runbook Knowledge Base - AI Network Incident Triage Assistant</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NOC Header -->
+  <header class="noc-header">
+    <div class="brand-container">
+      <div class="brand-logo">AI</div>
+      <div class="brand-title">AI Network Incident Triage Assistant</div>
+    </div>
+    <nav class="noc-nav">
+      <a href="index.html" class="nav-link">📊 Dashboard</a>
+      <a href="alerts.html" class="nav-link">🔔 Alerts</a>
+      <a href="incidents.html" class="nav-link">🚨 Incidents</a>
+      <a href="runbooks.html" class="nav-link active">📖 Runbooks</a>
+      <a href="escalations.html" class="nav-link">🛡️ Escalations</a>
+    </nav>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      SYS ONLINE
+    </div>
+  </header>
+
+  <main class="noc-container">
+
+    <div class="page-title-row">
+      <div>
+        <h1 class="page-title">Runbook Knowledge Base</h1>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Standard operational procedures (SOPs) matched by triage matching engine</p>
+      </div>
+    </div>
+
+    <div id="runbooks-container">
+      <div style="color: var(--text-muted); padding: 2rem;">Loading runbook knowledge base...</div>
+    </div>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/runbooks.js"></script>
+</body>
+</html>

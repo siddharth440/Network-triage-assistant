@@ -1,0 +1,18 @@
+{
+  "id": "RB-AUTH-01",
+  "title": "Authentication Failure",
+  "category": "Security",
+  "description": "Procedure for diagnosing SSH, RADIUS, TACACS+, or admin credential brute-force or lockout events.",
+  "conditions": {
+    "alert_types": ["authentication_failure"],
+    "required_symptoms_count": 1,
+    "min_auth_failures": 3
+  },
+  "steps": [
+    "Verify TACACS+/RADIUS server health and active directory integration",
+    "Analyze failed authentication source IP addresses for brute-force signatures",
+    "Check user account lockouts and TACACS+ key alignment",
+    "Verify management subnet ACLs on target gateway/switch",
+    "Review security audit logs and isolate unauthorized access attempts"
+  ]
+}

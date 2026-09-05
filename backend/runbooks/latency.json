@@ -1,0 +1,18 @@
+{
+  "id": "RB-LATENCY-01",
+  "title": "High Latency & Packet Degradation",
+  "category": "Performance",
+  "description": "Troubleshooting procedure for high latency, packet loss, bandwidth saturation, or buffer congestion.",
+  "conditions": {
+    "alert_types": ["high_latency", "packet_loss", "cpu_high", "memory_high"],
+    "required_symptoms_count": 2,
+    "min_latency_ms": 100.0
+  },
+  "steps": [
+    "Check interface bandwidth utilization and drop counters",
+    "Inspect top talkers and NetFlow traffic flow stats for anomalies",
+    "Check CPU/Memory load on core forwarding engines",
+    "Perform traceroute/path inspection to locate hop degradation",
+    "Verify upstream ISP link stability and SLA metrics"
+  ]
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerts Stream - AI Network Incident Triage Assistant</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NOC Header -->
+  <header class="noc-header">
+    <div class="brand-container">
+      <div class="brand-logo">AI</div>
+      <div class="brand-title">AI Network Incident Triage Assistant</div>
+    </div>
+    <nav class="noc-nav">
+      <a href="index.html" class="nav-link">📊 Dashboard</a>
+      <a href="alerts.html" class="nav-link active">🔔 Alerts</a>
+      <a href="incidents.html" class="nav-link">🚨 Incidents</a>
+      <a href="runbooks.html" class="nav-link">📖 Runbooks</a>
+      <a href="escalations.html" class="nav-link">🛡️ Escalations</a>
+    </nav>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      SYS ONLINE
+    </div>
+  </header>
+
+  <main class="noc-container">
+
+    <div class="page-title-row">
+      <div>
+        <h1 class="page-title">Alert Activity Stream & Noise Classification</h1>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Raw alert ingestion, deduplication counts, and noise filtering engine</p>
+      </div>
+      <div class="action-bar">
+        <button id="btn-clear-alerts-page" class="btn btn-danger">🗑️ Clear All Alerts</button>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+
+      <!-- Alerts Table Panel -->
+      <div class="noc-panel">
+        <div class="panel-header">
+          <div class="panel-title">🔔 Ingested Telemetry Alerts</div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; margin-right: 0.4rem;">FILTER:</label>
+            <select id="filter-alert-status" class="btn" style="padding: 0.35rem 0.6rem;">
+              <option value="all">ALL ALERTS</option>
+              <option value="correlated">CORRELATED</option>
+              <option value="noise">NOISE ONLY</option>
+              <option value="new">UNTRIAGED</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="noc-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Device</th>
+                <th>Severity</th>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Count</th>
+                <th>Status</th>
+                <th>Assigned Incident</th>
+              </tr>
+            </thead>
+            <tbody id="alerts-page-table-body">
+              <tr>
+                <td colspan="8" style="text-align:center; color: var(--text-muted); padding: 2rem;">Loading alert stream...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Uncorrelated Noise Breakdown Panel -->
+      <div class="noc-panel">
+        <div class="panel-header">
+          <div class="panel-title" style="color: var(--color-noise);">🔇 Classified Noise & Uncorrelated Events</div>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          Isolated events below correlation threshold (< 55%). Kept separate to prevent NOC operator alert fatigue.
+        </p>
+
+        <div id="uncorrelated-noise-list">
+          <div style="color: var(--text-muted); padding: 1rem;">Scanning for noise events...</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/alerts.js"></script>
+</body>
+</html>
