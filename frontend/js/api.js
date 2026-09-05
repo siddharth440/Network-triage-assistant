@@ -1,7 +1,9 @@
 /**
  * Centralized API Communication Module for AI Network Incident Triage Assistant
  */
-const API_BASE_URL = "http://localhost:8000/api";
+const API_BASE_URL = window.location.port === "3000"
+  ? "http://localhost:8000/api"
+  : `${window.location.origin}/api`;
 
 const API = {
   // Stats & Dashboard

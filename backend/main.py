@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from database import engine, Base, SessionLocal
 from seed_data import seed_database
 
@@ -46,6 +47,10 @@ app.include_router(runbooks_router)
 app.include_router(escalations_router)
 app.include_router(dashboard_router)
 app.include_router(demo_router)
+
+# Serve the dashboard from the same Render web service as the API.
+frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
+app.mount("/app", StaticFiles(directory=frontend_dir, html=True), name="frontend")
 
 @app.get("/")
 def root():
